@@ -31,9 +31,12 @@ class PhoneBook
 	private:
 		std::vector<Contact> contacts;
 	public:
-		void	addContact(std::string firstname, std::string lastname,
-						std::string nickname, std::string phoneNumber)
+	
+	void	addContact(std::string firstname, std::string lastname,
+		std::string nickname, std::string phoneNumber)
 		{
+			if (contacts.size() == 8)
+				contacts.erase(contacts.begin());
 			if (firstname.length() >= 10)
 				firstname.at(9) = '.';
 			if (lastname.length() >= 10)
