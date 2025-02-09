@@ -1,5 +1,7 @@
 #include <iostream>
 #include <vector>
+#include <ios>
+#include <iomanip>
 
 class Contact
 {
@@ -15,10 +17,11 @@ class Contact
 		
 		void	printcontact()
 		{
-			std::cout << "first name : " << firstname << std::endl;
-			std::cout << "last name : " << lastname << std::endl;
-			std::cout << "nickname : " << nickname << std::endl;
-			std::cout << "phone number : " << phoneNumber << std::endl;
+			std::cout << "-----------------------------------------------------------------" << std::endl;
+			std::cout << "|" << std::setw(15) << std::right << firstname.substr(0, 10) << "|";
+			std::cout << std::setw(15) << std::right << lastname.substr(0, 10) << "|";
+			std::cout << std::setw(15) << std::right << nickname.substr(0, 10) << "|";
+			std::cout << std::setw(15) << std::right << phoneNumber.substr(0, 10) << "|" << std::endl;
 		}
 
 };
@@ -31,13 +34,27 @@ class PhoneBook
 		void	addContact(std::string firstname, std::string lastname,
 						std::string nickname, std::string phoneNumber)
 		{
+			if (firstname.length() >= 10)
+				firstname.at(9) = '.';
+			if (lastname.length() >= 10)
+				lastname.at(9) = '.';
+			if (nickname.length() >= 10)
+				nickname.at(9) = '.';
+			if (phoneNumber.length() >= 10)
+				phoneNumber.at(9) = '.';
 			contacts.push_back(Contact(firstname, lastname, nickname, phoneNumber));
 		};
 
 		void	printcontacts()
 		{
+			std::cout << "-----------------------------------------------------------------" << std::endl;
+			std::cout << "|" << std::setw(15) << "first name" << "|";
+			std::cout << std::setw(15) << std::right << "last name" << "|";
+			std::cout << std::setw(15) << std::right << "nickname" << "|";
+			std::cout << std::setw(15) << std::right << "phone number" << "|" << std::endl;
 			for (int i = 0; i < contacts.size(); i++)
 				contacts[i].printcontact();
+			std::cout << "-----------------------------------------------------------------" << std::endl;
 		}
 };
 
@@ -51,11 +68,13 @@ int main(void)
 	std::string	nickname;
 	std::string	phoneNumber;
 
-	std::cout << "Please enter one of the following three commands: ADD, SEARCH, or EXIT." << std::endl;
-	std::getline(std::cin, cmd);
-	while (cmd != "EXIT")
+	while (1)
 	{
-		if (cmd == "ADD")
+		std::cout << "Please enter one of the following three commands: ADD, SEARCH, or EXIT." << std::endl;
+		std::cin >> cmd;
+		if (cmd == "EXIT")
+			return (0);
+		else if (cmd == "ADD")
 		{
 			std::cout << "Enter your first name ." << std::endl;
 			std::cin >> firstname;
@@ -66,8 +85,8 @@ int main(void)
 			std::cout << "Enter your phone number ." << std::endl;
 			std::cin >> phoneNumber;
 			phonebook.addContact(firstname, lastname, nickname, phoneNumber);
+			phonebook.printcontacts();
 		}
-		phonebook.printcontacts();
 	}
 	return (0);
 }
