@@ -67,6 +67,7 @@ int main(void)
 	std::string	lastname;
 	std::string	nickname;
 	std::string	phoneNumber;
+	std::string secret;
 
 	while (1)
 	{
@@ -84,6 +85,8 @@ int main(void)
 			std::cin >> nickname;
 			std::cout << "Enter your phone number ." << std::endl;
 			std::cin >> phoneNumber;
+			std::cout << "Tell me your darkest secret ." << std::endl;
+			std::cin >> secret;
 			phonebook.addContact(firstname, lastname, nickname, phoneNumber);
 			phonebook.printcontacts();
 		}
