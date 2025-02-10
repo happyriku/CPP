@@ -3,6 +3,8 @@
 #include <ios>
 #include <iomanip>
 
+# define CONTACT_SIZE 8
+
 class Contact
 {
 	private:
@@ -13,9 +15,26 @@ class Contact
 		std::string	secret;
 	
 	public:
-		Contact(std::string f, std::string l, std::string n, std::string p, std::string s)
-			: firstname(f), lastname(l), nickname(n), phoneNumber(p), secret(s) {}
+		Contact() : firstname(""), lastname(""), nickname(""), phoneNumber(""), secret("") {}
 		
+		void	setContactInfo(std::string f, std::string l,
+					std::string n, std::string p, std::string s)
+		{
+			firstname = f;
+			lastname = l;
+			nickname = n;
+			phoneNumber = p;
+			secret = s;	
+		}
+
+		bool	isEmpty()
+		{
+			if (firstname.empty() || lastname.empty() || nickname.empty()
+					|| phoneNumber.empty() || secret.empty())
+					return (true);
+			return (false);			
+		}
+
 		void	printContacts(int i)
 		{
 			std::cout << "-----------------------------------------------------------------" << std::endl;
@@ -41,14 +60,23 @@ class Contact
 class PhoneBook
 {
 	private:
-		std::vector<Contact> contacts;
+		Contact contacts[8];
 	public:
 	
+	int		checkElem()
+	{
+		int	i = -1;
+
+		while (contacts[i].isEmpty())
+			i++;
+		return (i);
+	}
+	
 	void	addContact(std::string firstname, std::string lastname,
-		std::string nickname, std::string phoneNumber, std::string secret)
+		std::string nickname, std::string phoneNumber, std::string secret, int num)
 		{
-			if (contacts.size() == 8)
-				contacts.erase(contacts.begin());
+			//if (contacts.size() == 8)
+			//	contacts.erase(contacts.begin());
 			if (firstname.length() >= 10)
 				firstname.at(9) = '.';
 			if (lastname.length() >= 10)
@@ -59,23 +87,26 @@ class PhoneBook
 				phoneNumber.at(9) = '.';
 			if (secret.length() >= 10)
 				secret.at(9) = '.';
-			contacts.push_back(Contact(firstname, lastname, nickname, phoneNumber, secret));
+			contacts[num].setContactInfo(firstname, lastname, nickname, phoneNumber, secret);
 			std::cout << "Successfully registered contact details!" << std::endl;
 		}
 
 		void	printListItems()
 		{
+			int num;
+
 			std::cout << "-----------------------------------------------------------------" << std::endl;
 			std::cout << "|" << std::setw(15) << "index" << "|";
 			std::cout << std::setw(15) << "first name" << "|";
 			std::cout << std::setw(15) << std::right << "last name" << "|";
 			std::cout << std::setw(15) << std::right << "nickname" << "|" << std::endl;
-			for (int i = 0; i < contacts.size(); i++)
+			num = checkElem();
+			for (int i = 0; i < num; i++)
 				contacts[i].printContacts(i + 1);
 			std::cout << "-----------------------------------------------------------------" << std::endl;
 		}
 
-		void	printListItemsByIndex(int index)
+		void	printListItemsByIndex()
 		{
 			std::cout << "------------------------------------------------------------------------------------------------" << std::endl;
 			std::cout << "|" << std::setw(15) << "index" << "|";
@@ -88,13 +119,13 @@ class PhoneBook
 
 		void	printContactOfIndex(int index)
 		{
-			if (index < 0 || contacts.size() < index)
+			if (index <= 0 || checkElem() < index)
 			{
-				std::cout << "index is out of range or wrong .";
+				std::cout << "index is out of range or wrong ." << std::endl;
 				return ;
 			}
-			printListItemsByIndex(index + 1);
-			contacts[index].printContactsByIndex(index + 1);
+			printListItemsByIndex();
+			contacts[index - 1].printContactsByIndex(index);
 		}
 };
 
@@ -109,6 +140,7 @@ int main(void)
 	std::string	phoneNumber;
 	std::string secret;
 	int			index;
+	int			num;
 
 	while (1)
 	{
@@ -128,7 +160,9 @@ int main(void)
 			std::getline(std::cin, phoneNumber);
 			std::cout << "Tell me your darkest secret ." << std::endl;
 			std::getline(std::cin, secret);
-			phonebook.addContact(firstname, lastname, nickname, phoneNumber, secret);
+			num = phonebook.checkElem();
+			if (num <= 8)
+				phonebook.addContact(firstname, lastname, nickname, phoneNumber, secret, num);
 		}
 		else if (cmd == "SEARCH")
 		{
@@ -136,7 +170,7 @@ int main(void)
 			std::cout << "Enter the index of entry ." << std::endl;
 			std::cin >> index;
 			std::cin.ignore();
-			phonebook.printContactOfIndex(index - 1);
+			phonebook.printContactOfIndex(index);
 		}
 	}
 	return (0);
