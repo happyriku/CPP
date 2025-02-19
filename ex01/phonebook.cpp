@@ -82,16 +82,7 @@ class PhoneBook
 	void	addContact(std::string firstname, std::string lastname,
 		std::string nickname, std::string phoneNumber, std::string secret, int num)
 		{
-			if (num > 8)
-			{
-				for (int i = 0; i < 7; i++)
-				{
-					std::cout << "----\n";
-					contacts[i] = contacts[i + 1];
-				}
-				num = 8;
-			}
-			contacts[num].setContactInfo(replace(firstname), replace(lastname),
+			contacts[num % 8].setContactInfo(replace(firstname), replace(lastname),
 						replace(nickname), replace(phoneNumber), replace(secret));
 			std::cout << "Successfully registered contact details!" << std::endl;
 		}
@@ -144,6 +135,7 @@ int main(void)
 	std::string	phoneNumber;
 	std::string secret;
 	int			index;
+	int			count = 0;
 
 	while (1)
 	{
@@ -164,7 +156,7 @@ int main(void)
 			std::cout << "Tell me your darkest secret ." << std::endl;
 			std::getline(std::cin, secret);
 			phonebook.addContact(firstname, lastname,
-						nickname, phoneNumber, secret, phonebook.checkElem());
+						nickname, phoneNumber, secret, count++);
 		}
 		else if (cmd == "SEARCH")
 		{
