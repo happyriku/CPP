@@ -65,29 +65,34 @@ class PhoneBook
 	
 	int		checkElem()
 	{
-		int	i = -1;
+		int	i = 0;
 
-		while (contacts[i].isEmpty())
+		while (!(contacts[i].isEmpty()))
 			i++;
 		return (i);
 	}
-	
+
+	std::string	replace(std::string info)
+	{
+		if (info.length() >= 10)
+			info.at(9) = '.';
+		return (info);
+	}
+
 	void	addContact(std::string firstname, std::string lastname,
 		std::string nickname, std::string phoneNumber, std::string secret, int num)
 		{
-			//if (contacts.size() == 8)
-			//	contacts.erase(contacts.begin());
-			if (firstname.length() >= 10)
-				firstname.at(9) = '.';
-			if (lastname.length() >= 10)
-				lastname.at(9) = '.';
-			if (nickname.length() >= 10)
-				nickname.at(9) = '.';
-			if (phoneNumber.length() >= 10)
-				phoneNumber.at(9) = '.';
-			if (secret.length() >= 10)
-				secret.at(9) = '.';
-			contacts[num].setContactInfo(firstname, lastname, nickname, phoneNumber, secret);
+			if (num > 8)
+			{
+				for (int i = 0; i < 7; i++)
+				{
+					std::cout << "----\n";
+					contacts[i] = contacts[i + 1];
+				}
+				num = 8;
+			}
+			contacts[num].setContactInfo(replace(firstname), replace(lastname),
+						replace(nickname), replace(phoneNumber), replace(secret));
 			std::cout << "Successfully registered contact details!" << std::endl;
 		}
 
@@ -129,7 +134,6 @@ class PhoneBook
 		}
 };
 
-
 int main(void)
 {
 	PhoneBook	phonebook;
@@ -140,7 +144,6 @@ int main(void)
 	std::string	phoneNumber;
 	std::string secret;
 	int			index;
-	int			num;
 
 	while (1)
 	{
@@ -160,9 +163,8 @@ int main(void)
 			std::getline(std::cin, phoneNumber);
 			std::cout << "Tell me your darkest secret ." << std::endl;
 			std::getline(std::cin, secret);
-			num = phonebook.checkElem();
-			if (num <= 8)
-				phonebook.addContact(firstname, lastname, nickname, phoneNumber, secret, num);
+			phonebook.addContact(firstname, lastname,
+						nickname, phoneNumber, secret, phonebook.checkElem());
 		}
 		else if (cmd == "SEARCH")
 		{
