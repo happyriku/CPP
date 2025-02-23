@@ -61,43 +61,42 @@ class PhoneBook
 {
 	private:
 		Contact contacts[8];
+
 	public:
 	
-	int		checkElem()
-	{
-		int	i = 0;
-
-		while (!(contacts[i].isEmpty()))
-			i++;
-		return (i);
-	}
-
-	std::string	replace(std::string info)
-	{
-		if (info.length() >= 10)
-			info.at(9) = '.';
-		return (info);
-	}
-
-	void	addContact(std::string firstname, std::string lastname,
-		std::string nickname, std::string phoneNumber, std::string secret, int num)
+		int		ElemSize()
 		{
-			contacts[num % 8].setContactInfo(replace(firstname), replace(lastname),
-						replace(nickname), replace(phoneNumber), replace(secret));
-			std::cout << "Successfully registered contact details!" << std::endl;
+			int	i = -1;
+
+			while (!(contacts[++i].isEmpty()))
+				if (i == 8)
+					break;
+			return (i);
 		}
+
+		std::string	replace(std::string info)
+		{
+			if (info.length() >= 10)
+				info.at(9) = '.';
+			return (info);
+		}
+
+		void	addContact(std::string firstname, std::string lastname,
+			std::string nickname, std::string phoneNumber, std::string secret, int num)
+			{
+				contacts[num % CONTACT_SIZE].setContactInfo(replace(firstname), replace(lastname),
+							replace(nickname), replace(phoneNumber), replace(secret));
+				std::cout << "Successfully registered contact details!" << std::endl;
+			}
 
 		void	printListItems()
 		{
-			int num;
-
 			std::cout << "-----------------------------------------------------------------" << std::endl;
 			std::cout << "|" << std::setw(15) << "index" << "|";
 			std::cout << std::setw(15) << "first name" << "|";
 			std::cout << std::setw(15) << std::right << "last name" << "|";
 			std::cout << std::setw(15) << std::right << "nickname" << "|" << std::endl;
-			num = checkElem();
-			for (int i = 0; i < num; i++)
+			for (int i = 0; i < ElemSize(); i++)
 				contacts[i].printContacts(i + 1);
 			std::cout << "-----------------------------------------------------------------" << std::endl;
 		}
@@ -115,7 +114,7 @@ class PhoneBook
 
 		void	printContactOfIndex(int index)
 		{
-			if (index <= 0 || checkElem() < index)
+			if (index <= 0 || ElemSize() < index)
 			{
 				std::cout << "index is out of range or wrong ." << std::endl;
 				return ;
