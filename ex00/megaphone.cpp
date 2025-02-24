@@ -5,10 +5,8 @@ void	megaphone(char *str)
 	int	i = 0;
 	char up;
 
-	while (str[i])
-	{
-		if (str[i] >= 'a' && str[i] <= 'z')
-		{
+	while (str[i]){
+		if (str[i] >= 'a' && str[i] <= 'z'){
 			up = str[i] - 32;
 			std::cout << up;
 		}
@@ -28,6 +26,6 @@ int main(int argc, char **argv)
 	}
 	while (argv[i])
 		megaphone(argv[i++]);
-	//std::cout << "\n";
+	std::cout << std::endl;
 	return (0);
 }
